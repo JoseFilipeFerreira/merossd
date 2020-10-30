@@ -19,7 +19,7 @@ class MerossWrapper():
                 email=self.EMAIL,
                 password=self.PASSWORD)
 
-        self.manager = MerossManager(http_client=self.http_api_client)
+        self.manager = MerossManager(http_client=self.http_api_client, auto_reconnect=True)
         await self.manager.async_init()
 
         await self.manager.async_device_discovery()
