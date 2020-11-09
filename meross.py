@@ -9,10 +9,12 @@ class MerossWrapper():
         self.EMAIL = os.environ.get('MEROSS_EMAIL')
         self.PASSWORD = os.environ.get('MEROSS_PASSWORD')
         self.FIFO_NAME = fifo_name
-        self.FILE_STATE_NAME = fifo_state_name
+        self.FIFO_STATE_NAME = fifo_state_name
 
         os.mkfifo(self.FIFO_NAME)
         print(f"REQUESTS FIFO named '{self.FIFO_NAME}' is created successfully.")
+        os.mkfifo(self.FIFO_STATE_NAME)
+        print(f"STATE FIFO named '{self.FIFO_STATE_NAME}' is created successfully.")
 
     async def connect(self):
         self.http_api_client = await MerossHttpClient.async_from_user_password(
@@ -32,7 +34,7 @@ class MerossWrapper():
         self.update_state_file()
 
     def update_state_file(self):
-        with open(self.FILE_STATE_NAME, "w") as f:
+        with open(self.FIFO_STATE_NAME, "w") as f:
             f.write("on\n" if self.light_on else "off\n")
     
     async def toggle(self):
@@ -80,7 +82,7 @@ class MerossWrapper():
         await self.http_api_client.async_logout()
 
         os.remove(self.FIFO_NAME)
-        os.remove(self.FILE_STATE_NAME)
+        os.remove(self.FIFO_STATE_NAME)
 
 async def main():
     FIFO_NAME = "/tmp/meross.d"
