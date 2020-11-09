@@ -10,6 +10,6 @@ else
 fi
 
 while true; do
-    rm -f /tmp/meross.daemon
+    rm -f /tmp/{meross.d,merossstate.d}
     python meross.py
 done
