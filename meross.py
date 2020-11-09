@@ -13,6 +13,7 @@ class MerossWrapper():
 
         os.mkfifo(self.FIFO_NAME)
         print(f"REQUESTS FIFO named '{self.FIFO_NAME}' is created successfully.")
+
         os.mkfifo(self.FIFO_STATE_NAME)
         print(f"STATE FIFO named '{self.FIFO_STATE_NAME}' is created successfully.")
 
@@ -31,12 +32,11 @@ class MerossWrapper():
             await plug.async_update()
             self.light_on = plug.is_on()
 
-        self.update_state_file()
+    def update_state_pipe(self):
+        fifo = open(self.FIFO_STATE_NAME, "w")
+        fifo.write("on\n" if self.light_on else "off\n")
+        fifo.close()
 
-    def update_state_file(self):
-        with open(self.FIFO_STATE_NAME, "w") as f:
-            f.write("on\n" if self.light_on else "off\n")
-    
     async def toggle(self):
         if self.light_on:
             await self.off()
@@ -47,16 +47,18 @@ class MerossWrapper():
         for plug in self.plugs:
             await plug.async_turn_on(channel=0)
         self.light_on = True
-        self.update_state_file()
+        self.update_state_pipe()
 
     async def off(self):
         for plug in self.plugs:
             await plug.async_turn_off(channel=0)
         self.light_on = False
-        self.update_state_file()
+        self.update_state_pipe()
 
     async def listen_fifo(self):
         self.fifo = open(self.FIFO_NAME, "r")
+
+        print("listening fifo")
 
         while True:
             for line in self.fifo:
@@ -86,8 +88,8 @@ class MerossWrapper():
 
 async def main():
     FIFO_NAME = "/tmp/meross.d"
-    FILE_STATE_NAME = "/tmp/merossstate.d"
-    light = MerossWrapper(FIFO_NAME, FILE_STATE_NAME)
+    FIFO_STATE_NAME = "/tmp/merossstate.d"
+    light = MerossWrapper(FIFO_NAME, FIFO_STATE_NAME)
     await light.connect()
     await light.listen_fifo()
     await light.close()
