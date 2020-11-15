@@ -1,6 +1,4 @@
 #!/bin/bash
-git pull
-
 if [ -e '.env' ]; then
     source '.env/bin/activate'
 else
@@ -9,7 +7,7 @@ else
     pip install -r 'requirements.txt' --upgrade || exit 4
 fi
 
-while true; do
-    rm -f /tmp/{meross.d,merossstate.d}
-    python meross.py
+while :
+do
+    python server.py
 done
