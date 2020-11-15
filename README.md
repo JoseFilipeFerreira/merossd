@@ -13,12 +13,12 @@ simple Meross daemon created to control all lights associated with a meross acou
 | on      | turn on all bulbs   |
 | off     | turn off all bulbs  |
 | toggle  | toggle all bulbs    |
-| close   | close deamon        |
+| close   | close daemon        |
 
 * read from the pipe `/tmp/merossstate.d` to get the state of all bulbs
 
 ## example scripts
-the following scripts assume that the daemon is running on a remote machine 
+the following scripts assume that the daemon is running on a remote machine
 * [meross-cli](https://github.com/JoseFilipeFerreira/toolbelt/blob/master/toolbox/meross-cli.tool) - control lights via terminal
 * [toggle](https://github.com/JoseFilipeFerreira/shortcuts/blob/master/shorts/tasks/toggle) - control lights via [termux widget](https://wiki.termux.com/wiki/Termux:Widget)
 
