@@ -11,14 +11,10 @@ class MerossWrapper():
         with open("config.yaml", "r") as f:
             self.config = yaml.safe_load(f)
 
-
-        self.EMAIL = os.environ.get('MEROSS_EMAIL')
-        self.PASSWORD = os.environ.get('MEROSS_PASSWORD')
-
     async def connect(self):
         self.http_api_client = await MerossHttpClient.async_from_user_password(
-                email=self.config.credentials.email,
-                password=self.config.credentials.password)
+                email=self.config["credentials"]["email"],
+                password=self.config["credentials"]["password"])
 
         self.manager = MerossManager(http_client=self.http_api_client, auto_reconnect=True)
         await self.manager.async_init()
