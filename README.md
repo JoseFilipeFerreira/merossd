@@ -9,10 +9,7 @@ credentials:
     password: [YOUR PASSWORD]
 ```
 
-* run:
-```bash
-py server.py
-```
+* run with docker
 
 ## usage
 |  endpoint    |  result            |
