@@ -8,8 +8,8 @@ from meross_iot.manager import MerossManager
 
 class MerossWrapper():
     def __init__(self):
-        with open("config.yaml", "r") as f:
-            self.config = yaml.safe_load(f)
+        with open("config.yaml", "r") as file:
+            self.config = yaml.safe_load(file)
 
     async def connect(self):
         self.http_api_client = await MerossHttpClient.async_from_user_password(
